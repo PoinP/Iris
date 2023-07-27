@@ -11,6 +11,7 @@
 #include <Objects/Materials/Constant.h>
 #include <Objects/Materials/Reflective.h>
 #include <Objects/Materials/Refractive.h>
+#include <Objects/Materials/Emissive.h>
 
 using namespace rapidjson;
 
@@ -431,27 +432,32 @@ std::shared_ptr<Material> Scene::loadMaterial(const rapidjson::Value& material)
 		backfaceCulling = culling->value.GetBool();
 	}
 
-	if (materialType == "diffuse" || materialType == "reflective" || materialType == "constant")
+	const Value& albedo = material.FindMember("albedo")->value;
+	assert(!albedo.IsNull() && albedo.IsArray());
+	const Color color = static_cast<Color>(loadVector3f(albedo.GetArray()));
+
+	if (materialType == "diffuse") return std::make_shared<Diffuse>(color, smoothShading, backfaceCulling);
+	if (materialType == "constant") return std::make_shared<Constant>(color, smoothShading, backfaceCulling);
+
+	if (materialType == "reflective")
 	{
-		const Value& albedo = material.FindMember("albedo")->value;
-		assert(!albedo.IsNull() && albedo.IsArray());
-		const Color color = static_cast<Color>(loadVector3f(albedo.GetArray()));
-
-		if (materialType == "diffuse") return std::make_shared<Diffuse>(color, smoothShading, backfaceCulling);
-		if (materialType == "constant") return std::make_shared<Constant>(color, smoothShading, backfaceCulling);
-
-		if (materialType == "reflective")
+		float roughnessValue = 0.0f;
+		const Value::ConstMemberIterator& roughness = material.FindMember("roughness");
+		if (roughness != material.MemberEnd())
 		{
-			float roughnessValue = 0.0f;
-			const Value::ConstMemberIterator& roughness = material.FindMember("roughness");
-			if (roughness != material.MemberEnd())
-			{
-				assert(!roughness->value.IsNull() && roughness->value.IsFloat());
-				roughnessValue = roughness->value.GetFloat();
-			}
-
-			return std::make_shared<Reflective>(color, 0.95f, roughnessValue, smoothShading, backfaceCulling);
+			assert(!roughness->value.IsNull() && roughness->value.IsFloat());
+			roughnessValue = roughness->value.GetFloat();
 		}
+
+		return std::make_shared<Reflective>(color, 0.95f, roughnessValue, smoothShading, backfaceCulling);
+	}
+
+	if (materialType == "emissive")
+	{
+		const Value& strength = material.FindMember("strength")->value;
+		assert(!strength.IsNull() && albedo.IsFloat());
+		const float strengthValue = strength.GetFloat();
+		return std::make_shared<Emissive>(color, strengthValue, smoothShading, backfaceCulling);
 	}
 
 	if (materialType == "refractive")

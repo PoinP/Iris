@@ -57,7 +57,7 @@ Color Refractive::shadeScene(const Ray& ray, const Scene& scene, const Surface::
             Renderer::traceRay(refractedRay, scene) : m_Albedo;
     }
 
-    const float biasFactor = 0.01f;
+    const float biasFactor = 0.05f;
     Vector3f bias = calculateBias(rayDir, context.faceNormal, biasFactor, false);
     Ray reflectedRay(hitPoint + bias, vecReflect(rayDir, refrNormal), ray.depth() + 1);
     reflectedColor = scene.settings().flags.reflections ? 

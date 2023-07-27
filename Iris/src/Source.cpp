@@ -16,18 +16,21 @@ void renderWithUI(const Scene& scene, unsigned sampleCount, const std::string& o
 
 int main()
 {
-	const int sampleCount = 10;
+	const int cornellSampleCount = 1200;
+	const int bigScenesampleCount = 10;
 
 	// Note: This scene is in the repo bit it is zipped inside the folder!
-	Scene scene("scenes\\custom\\big_scene.crtscene");
+	//Scene scene("scenes\\custom\\big_scene.crtscene");
+	//std::vector<std::string> paths = {
+	//	"textures\\Yokahoma3\\posx.jpg", "textures\\Yokahoma3\\posy.jpg", "textures\\Yokahoma3\\posz.jpg",
+	//	"textures\\Yokahoma3\\negx.jpg", "textures\\Yokahoma3\\negy.jpg", "textures\\Yokahoma3\\negz.jpg"
+	//};
 
-	std::vector<std::string> paths = {
-		"textures\\Yokahoma3\\posx.jpg", "textures\\Yokahoma3\\posy.jpg", "textures\\Yokahoma3\\posz.jpg",
-		"textures\\Yokahoma3\\negx.jpg", "textures\\Yokahoma3\\negy.jpg", "textures\\Yokahoma3\\negz.jpg"
-	};
+	//scene.setBackground(CubeMap(paths));
 
-	scene.setBackground(CubeMap(paths));
-	renderWithUI(scene, sampleCount, "out\\scene.ppm");
+	Scene scene("scenes\\custom\\cornell_box.crtscene");
+
+	renderWithUI(scene, cornellSampleCount, "out\\cornell-box.ppm");
 }
 
 void render(const Scene& scene, unsigned sampleCount, const std::string& outputPath)
@@ -40,7 +43,7 @@ void render(const Scene& scene, unsigned sampleCount, const std::string& outputP
 void renderWithUI(const Scene& scene, unsigned sampleCount, const std::string& outputPath)
 {
 	const SceneSettings& settings = scene.settings();
-	GL::Window window({ settings.width - 100, settings.height - 100, "Chaos Ray Tracing" });
+	GL::Window window({ settings.width - 100, settings.height - 100, "Iris" });
 
 	float verticies[] =
 	{

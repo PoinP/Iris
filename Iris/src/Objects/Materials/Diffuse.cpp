@@ -19,6 +19,9 @@ Color Diffuse::shadeScene(const Ray& ray, const Scene& scene, const Surface::Con
 	if (!scene.settings().flags.globalIllumination)
 		return calculateDirectLight(ray, scene, context);
 	
+	if (scene.lights().empty())
+		return calculateIndirectLight(ray, scene, context);
+
 	return (calculateDirectLight(ray, scene, context) + calculateIndirectLight(ray, scene, context)) / 2.0f;
 }
 

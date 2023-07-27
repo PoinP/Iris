@@ -3,6 +3,8 @@ A simple ray tracer written in C++
 
 Some renders:
 
+![](/assets/cornell.png)
+
 ![](/assets/big_scene.png)
 
 ![](/assets/big_scene_depth.png)
