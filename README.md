@@ -1,6 +1,8 @@
 # Iris
 A simple ray tracer written in C++
 
+A [paper](/paper/Balancing-In-Parallel-Raytracing.pdf) analysing balancing strategies of the program in Bulgarian.
+
 Some renders:
 
 ![](/assets/cornell.png)
