@@ -22,25 +22,25 @@
 	
 	"lights": [
 		{
-			"intensity": 2000,
+			"intensity": 2000.0,
 			"position": [
 				9, 7, 0
 			]
 		},		
 		{
-			"intensity": 2000,
+			"intensity": 2000.0,
 			"position": [
 				-9, 16, 0
 			]
 		},
 		{
-			"intensity": 500,
+			"intensity": 500.0,
 			"position": [
 				0, 9, 7.5
 			]
 		},		
 		{
-			"intensity": 500,
+			"intensity": 500.0,
 			"position": [
 				0, 9, -7.5
 			]
