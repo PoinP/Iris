@@ -42,7 +42,7 @@ void Renderer::render(const Scene& scene, unsigned sampleCount, unsigned threadC
 		for (std::thread& thread : threads)
 			thread.join();
 
-		std::cout << "Render complete!\n";
+		std::cout << "Render completed!\n";
 	}
 
 #else

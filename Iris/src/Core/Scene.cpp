@@ -280,7 +280,7 @@ bool Scene::loadLights(const rapidjson::Document& json)
 		for (const Value& light : lightArray)
 		{
 			const Value& intensity = light.FindMember("intensity")->value;
-			assert(!intensity.IsNull() && intensity.IsFloat());
+			assert(!intensity.IsNull() && intensity.IsNumber());
 			const Value& position = light.FindMember("position")->value;
 			assert(!position.IsNull() && position.IsArray());
 
@@ -433,6 +433,18 @@ std::shared_ptr<Material> Scene::loadMaterial(const rapidjson::Value& material)
 	}
 
 	const Value& albedo = material.FindMember("albedo")->value;
+
+	if (materialType == "refractive")
+	{
+		const Value& ior = material.FindMember("ior")->value;
+		assert(!ior.IsNull() && ior.IsFloat());
+		const float indexOfRefraction = ior.GetFloat();
+		
+		const Color color = !albedo.IsNull() && albedo.IsArray() ? static_cast<Color>(loadVector3f(albedo.GetArray())) : Color(1.0f, 1.0f, 1.0f);
+
+		return std::make_shared<Refractive>(Color(1.0f, 1.0f, 1.0f), indexOfRefraction, smoothShading, backfaceCulling);
+	}
+
 	assert(!albedo.IsNull() && albedo.IsArray());
 	const Color color = static_cast<Color>(loadVector3f(albedo.GetArray()));
 
@@ -455,18 +467,9 @@ std::shared_ptr<Material> Scene::loadMaterial(const rapidjson::Value& material)
 	if (materialType == "emissive")
 	{
 		const Value& strength = material.FindMember("strength")->value;
-		assert(!strength.IsNull() && albedo.IsFloat());
+		assert(!strength.IsNull() && strength.IsNumber());
 		const float strengthValue = strength.GetFloat();
 		return std::make_shared<Emissive>(color, strengthValue, smoothShading, backfaceCulling);
-	}
-
-	if (materialType == "refractive")
-	{
-		const Value& ior = material.FindMember("ior")->value;
-		assert(!ior.IsNull() && ior.IsFloat());
-		const float indexOfRefraction = ior.GetFloat();
-
-		return std::make_shared<Refractive>(Color(1.0f, 1.0f, 1.0f), indexOfRefraction, smoothShading, backfaceCulling);
 	}
 
 	assert(false);

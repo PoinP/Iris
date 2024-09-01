@@ -16,7 +16,7 @@ void renderWithUI(const Scene& scene, unsigned sampleCount, const std::string& o
 
 int main()
 {
-	const int cornellSampleCount = 1200;
+	const int cornellSampleCount = 100;
 	const int bigScenesampleCount = 10;
 
 	// Note: This scene is in the repo bit it is zipped inside the folder!
@@ -29,7 +29,7 @@ int main()
 	//scene.setBackground(CubeMap(paths));
 
 	Scene scene("scenes\\custom\\cornell_box.crtscene");
-
+	
 	renderWithUI(scene, cornellSampleCount, "out\\cornell-box.ppm");
 }
 
